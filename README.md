@@ -1,2 +1,2 @@
-# Projects
-Computer science projects from class courses. All written in C++. 
+# Work
+Salesforce Lightning Components and Apex wrritten code. 
