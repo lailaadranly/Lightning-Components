@@ -1,0 +1,117 @@
+<template>
+    <lightning-card variant="Narrow">
+        <table class="slds-table slds-table_cell-buffer">
+            <thead>
+                <tr>
+                    <td>
+                        <div class="slds-list_horizontal">
+                            <div>
+                                <lightning-icon icon-name="custom:custom26" class="slds-float_left" title="SObjects">
+                                </lightning-icon>
+                            </div>
+                            <div style="padding-left: 10px; font-size: 20px; text-align: center; font-weight: bold;">
+                                <h1>
+                                    <lightning-formatted-text value="SObjects" class="slds-float_left">
+                                    </lightning-formatted-text>
+                                </h1>
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        <div>
+                            <lightning-button variant="neutral" label="SObject Setup Wizard" style="margin:5px"
+                                class="slds-float_right" alternative-text="SObject Setup Wizard"
+                                onclick={callSObjectSetupWizard}>
+                            </lightning-button>
+                            <lightning-button variant="neutral" label="New SObject" style="margin:5px"
+                                class="slds-float_right" alternative-text="New SObject" onclick={createNewSObject}>
+                            </lightning-button>
+                        </div>
+                    </td>
+                </tr>
+            </thead>
+        </table>
+        <table class="slds-table slds-table_cell-buffer">
+            <thead>
+                <tr class="slds-line-height_reset">
+                    <td scope="col">
+                        <lightning-input type="text" variant="standard" name="name" value={name} label="SObject Name"
+                            placeholder="Enter SObject Name" onkeyup={handleKeyUp}></lightning-input>
+                    </td>
+                    <td scope="col">
+                        <lightning-input type="text" variant="standard" name="address" value={address} label="Address"
+                            placeholder="Enter Street, City, and/or Zip" onkeyup={handleKeyUp}></lightning-input>
+                    </td>
+                    <td scope="col">
+                        <lightning-combobox name="vaccineType" label="Vaccine Type" value={vaccineType}
+                            placeholder="Select Vaccine Type" options={vaccineTypePickListValues}
+                            onchange={handleChange}></lightning-combobox>
+                    </td>
+                    <td scope="col">
+                        <lightning-input type="date" variant="standard" name="startDate" value={startDate}
+                            label="Start Date" data-id='startDateId'
+                            field-level-help="Displays SObjects that start on or in the future of the selected date."
+                            onchange={handleDateChange}></lightning-input>
+                    </td>
+                    <td scope="col">
+                        <lightning-input type="date" variant="standard" name="closingDate" value={closingDate}
+                            label="Close Date" data-id='closingDateId'
+                            field-level-help="Displays SObjects that close on or before the selected date."
+                            onchange={handleDateChange}></lightning-input>
+                    </td>
+                    <td scope="col" style="padding-top: 30px;">
+                        <lightning-input type="toggle" variant="standard" name="archived" value={archived} 
+                            label="Archived?" message-toggle-active="Yes" message-toggle-inactive="No" data-id='archivedId'
+                            onchange={handleToggleChange}></lightning-input>
+                    </td>
+                    <td scope="col" style="padding-top: 30px;">
+                        <lightning-button variant="brand" label = "Reset" size="small"
+                            alternative-text="Reset" onclick={clearSearch}></lightning-button>
+                    </td>
+                </tr>
+            </thead>
+        </table>
+        <table class="slds-table slds-table_cell-buffer slds-table_bordered">
+            <thead>
+                <tr>
+                    <td class="slds-m-aroung_small slds-align_left" style="padding: 10px">
+                        <lightning-spinner if:true={isLoading} alternative-text="Loading" size="small">
+                        </lightning-spinner>
+                            <div slot="actions">
+                                <lightning-button-group class="slds-float_left">
+                                    <lightning-button label="First" variant="neutral" title="first"
+                                        icon-position="left" onclick={handleClick}></lightning-button>
+                                    <lightning-button label="Previous" variant="neutral" title="previous" 
+                                        icon-name="utility:chevronleft" icon-position="left"
+                                        onclick={handleClick}></lightning-button>
+                                </lightning-button-group>
+                            </div>
+                    </td>
+                    <td class="slds-m-top_small">
+                        <h2 class="slds-m-aroung_small slds-align_absolute-center" style="color: rgb(0, 0, 0); font-size:14px">
+                            {totalRecords} SObjects Found
+                            <strong>&nbsp;({pageNo} of {totalPages})&nbsp;</strong>
+                        </h2>
+                    </td>
+                    <td>
+                        <div slot="actions">
+                            <lightning-button-group class="slds-float_right">
+                                <lightning-button label="Next" variant="neutral" title="next"
+                                    icon-name="utility:chevronright" icon-position="right" onclick={handleClick}>
+                                </lightning-button>
+                                <lightning-button label="Last" variant="neutral" title="last"
+                                    icon-position="right" onclick={handleClick}></lightning-button>
+                            </lightning-button-group>
+                        </div>
+                    </td>
+                </tr>
+            </thead>
+        </table>
+        <template if:true={SObjectList}>
+            <lightning-datatable key-field="Id" columns={columns} data={recordsToDisplay} hide-checkbox-column
+                default-sort-direction={defaultSortDirection} sorted-direction={sortDirection} sorted-by={sortedBy}
+                onsort={onHandleSort}>
+            </lightning-datatable>
+        </template>
+    </lightning-card>
+</template>
